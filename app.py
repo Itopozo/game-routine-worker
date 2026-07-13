@@ -1,0 +1,1 @@
+print("Hello game-routine-bot!")
