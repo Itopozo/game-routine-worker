@@ -27,4 +27,4 @@ jobs:
           HOYOLAB_LTUID_V2: ${{ secrets.HOYOLAB_LTUID_V2 }}
           HOYOLAB_LTOKEN_V2: ${{ secrets.HOYOLAB_LTOKEN_V2 }}
           HOYOLAB_COOKIE_TOKEN_V2: ${{ secrets.HOYOLAB_COOKIE_TOKEN_V2 }}
-        run: python check_hoyolab.py
+        run: python check_all_games.py
