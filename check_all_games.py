@@ -101,9 +101,12 @@ if unsigned_games:
     ]
 
     message = (
-        "🔔 今日のHoYoLABログボに未受取があります！\n\n"
+        "🔔 今日のゲーム日課に未受取があります！\n\n"
         + "\n".join(status_lines)
-        + "\n\nリセットまであと少しです。"
+        + "\n\n【エンドフィールド】\n"
+        + "ログボページ：\n"
+        + "https://game.skport.com/endfield/sign-in\n\n"
+        + "リセットまであと少しです。"
     )
 
     discord_response = requests.post(
