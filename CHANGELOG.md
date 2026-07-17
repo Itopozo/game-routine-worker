@@ -6,6 +6,7 @@
 
 ### Added
 
+- プロジェクトの移行経緯・運用・検証をまとめた `docs/PROJECT_HISTORY.md`
 - HoYoLab APIに15秒のタイムアウト処理
 - Discord Webhookに10秒のタイムアウト処理
 - タイムアウトと接続失敗を区別する安全なエラーメッセージ
