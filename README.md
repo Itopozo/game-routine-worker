@@ -108,3 +108,4 @@ Workers KVのバインディング名は `NOTIFICATION_STATE` です。
 - Discord Webhook URLやCookieをコード、README、Issue、ログへ貼らないでください。
 - 本システムは受取状況の確認のみを行い、ログインボーナスの自動受取は行いません。
 - 変更予定は [TODO.md](TODO.md)、変更履歴は [CHANGELOG.md](CHANGELOG.md) で管理します。
+- 移行経緯・運用手順・検証記録は [docs/PROJECT_HISTORY.md](docs/PROJECT_HISTORY.md) を参照してください。
