@@ -104,7 +104,7 @@ async function checkGame(
 	} catch (error) {
 		if (isTimeoutError(error)) {
 			throw new Error(
-				`${game.name}: HoYoLab APIが15秒以内に応答しませんでした。`,
+				`${game.name}: HoYoLab APIが${HOYOLAB_REQUEST_TIMEOUT_MS / 1000}秒以内に応答しませんでした。`,
 			);
 		}
 
@@ -119,7 +119,21 @@ async function checkGame(
 		);
 	}
 
-	const result = await response.json<HoYoLabResponse>();
+	let result: HoYoLabResponse;
+
+	try {
+		result = await response.json<HoYoLabResponse>();
+	} catch (error) {
+		if (isTimeoutError(error)) {
+			throw new Error(
+				`${game.name}: HoYoLab APIが${HOYOLAB_REQUEST_TIMEOUT_MS / 1000}秒以内に応答しませんでした。`,
+			);
+		}
+
+		throw new Error(
+			`${game.name}: HoYoLab APIの応答を読み取れませんでした。`,
+		);
+	}
 
 	if (result.retcode !== 0) {
 		throw new Error(
@@ -157,7 +171,7 @@ async function sendDiscordMessage(
 	} catch (error) {
 		if (isTimeoutError(error)) {
 			throw new Error(
-				"Discord通知失敗: 10秒以内に応答しませんでした。",
+				`Discord通知失敗: ${DISCORD_REQUEST_TIMEOUT_MS / 1000}秒以内に応答しませんでした。`,
 			);
 		}
 
@@ -166,7 +180,21 @@ async function sendDiscordMessage(
 		);
 	}
 
-	const responseBody = await response.text();
+	let responseBody: string;
+
+	try {
+		responseBody = await response.text();
+	} catch (error) {
+		if (isTimeoutError(error)) {
+			throw new Error(
+				`Discord通知失敗: ${DISCORD_REQUEST_TIMEOUT_MS / 1000}秒以内に応答しませんでした。`,
+			);
+		}
+
+		throw new Error(
+			"Discord通知失敗: Webhookの応答を読み取れませんでした。",
+		);
+	}
 
 	console.log(`Discord HTTPステータス: ${response.status}`);
 
