@@ -4,6 +4,12 @@
 
 ## [Unreleased]
 
+### Added
+
+- HoYoLab APIに15秒のタイムアウト処理
+- Discord Webhookに10秒のタイムアウト処理
+- タイムアウトと接続失敗を区別する安全なエラーメッセージ
+
 ### Planned
 
 - エンドフィールドの受取状況判定
