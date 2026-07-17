@@ -26,6 +26,9 @@ const GAMES: GameConfig[] = [
 	},
 ];
 
+const HOYOLAB_REQUEST_TIMEOUT_MS = 15_000;
+const DISCORD_REQUEST_TIMEOUT_MS = 10_000;
+
 type HoYoLabResponse = {
 	retcode: number;
 	message: string;
@@ -48,6 +51,10 @@ type GameCheckResult =
 		status: "error";
 		errorMessage: string;
 	};
+
+function isTimeoutError(error: unknown): boolean {
+	return error instanceof Error && error.name === "TimeoutError";
+}
 
 function getJstDateKey(date = new Date()): string {
 	const jstDate = new Date(date.getTime() + 9 * 60 * 60 * 1000);
@@ -81,15 +88,30 @@ async function checkGame(
 		`cookie_token_v2=${env.HOYOLAB_COOKIE_TOKEN_V2}`,
 	].join("; ");
 
-	const response = await fetch(url.toString(), {
-		method: "GET",
-		headers: {
-			"User-Agent": "Mozilla/5.0",
-			Referer: "https://act.hoyolab.com/",
-			Cookie: cookie,
-			"x-rpc-signgame": game.signGame,
-		},
-	});
+	let response: Response;
+
+	try {
+		response = await fetch(url.toString(), {
+			method: "GET",
+			headers: {
+				"User-Agent": "Mozilla/5.0",
+				Referer: "https://act.hoyolab.com/",
+				Cookie: cookie,
+				"x-rpc-signgame": game.signGame,
+			},
+			signal: AbortSignal.timeout(HOYOLAB_REQUEST_TIMEOUT_MS),
+		});
+	} catch (error) {
+		if (isTimeoutError(error)) {
+			throw new Error(
+				`${game.name}: HoYoLab APIが${HOYOLAB_REQUEST_TIMEOUT_MS / 1000}秒以内に応答しませんでした。`,
+			);
+		}
+
+		throw new Error(
+			`${game.name}: HoYoLab APIへの接続に失敗しました。`,
+		);
+	}
 
 	if (!response.ok) {
 		throw new Error(
@@ -97,7 +119,21 @@ async function checkGame(
 		);
 	}
 
-	const result = await response.json<HoYoLabResponse>();
+	let result: HoYoLabResponse;
+
+	try {
+		result = await response.json<HoYoLabResponse>();
+	} catch (error) {
+		if (isTimeoutError(error)) {
+			throw new Error(
+				`${game.name}: HoYoLab APIが${HOYOLAB_REQUEST_TIMEOUT_MS / 1000}秒以内に応答しませんでした。`,
+			);
+		}
+
+		throw new Error(
+			`${game.name}: HoYoLab APIの応答を読み取れませんでした。`,
+		);
+	}
 
 	if (result.retcode !== 0) {
 		throw new Error(
@@ -118,18 +154,47 @@ async function sendDiscordMessage(
 	env: Env,
 	message: string,
 ): Promise<void> {
-	const response = await fetch(env.DISCORD_WEBHOOK_URL, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({
-			content: message,
-			flags: 4,
-		}),
-	});
+	let response: Response;
 
-	const responseBody = await response.text();
+	try {
+		response = await fetch(env.DISCORD_WEBHOOK_URL, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				content: message,
+				flags: 4,
+			}),
+			signal: AbortSignal.timeout(DISCORD_REQUEST_TIMEOUT_MS),
+		});
+	} catch (error) {
+		if (isTimeoutError(error)) {
+			throw new Error(
+				`Discord通知失敗: ${DISCORD_REQUEST_TIMEOUT_MS / 1000}秒以内に応答しませんでした。`,
+			);
+		}
+
+		throw new Error(
+			"Discord通知失敗: Webhookへの接続に失敗しました。",
+		);
+	}
+
+	let responseBody: string;
+
+	try {
+		responseBody = await response.text();
+	} catch (error) {
+		if (isTimeoutError(error)) {
+			throw new Error(
+				`Discord通知失敗: ${DISCORD_REQUEST_TIMEOUT_MS / 1000}秒以内に応答しませんでした。`,
+			);
+		}
+
+		throw new Error(
+			"Discord通知失敗: Webhookの応答を読み取れませんでした。",
+		);
+	}
 
 	console.log(`Discord HTTPステータス: ${response.status}`);
 
