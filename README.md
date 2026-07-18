@@ -78,7 +78,10 @@ npm run dev
 
 ## デプロイ
 
-本番用シークレットはWranglerまたはCloudflareダッシュボードで設定し、値をGitHubへ保存しないでください。
+`main` ブランチへのpushをCloudflareのGit連携が検知し、自動でビルド・デプロイします。
+本番用シークレットはCloudflareダッシュボードで管理し、値をGitHubへ保存しないでください。
+
+手動でデプロイする場合は以下を実行します。
 
 ```bash
 npm run deploy
