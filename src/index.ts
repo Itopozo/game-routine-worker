@@ -28,6 +28,7 @@ const GAMES: GameConfig[] = [
 
 const HOYOLAB_REQUEST_TIMEOUT_MS = 15_000;
 const DISCORD_REQUEST_TIMEOUT_MS = 10_000;
+const DISCORD_USER_ID = "322055600194453527";
 
 type HoYoLabResponse = {
 	retcode: number;
@@ -164,6 +165,9 @@ async function sendDiscordMessage(
 			},
 			body: JSON.stringify({
 				content: message,
+				allowed_mentions: {
+					users: [DISCORD_USER_ID],
+				},
 				flags: 4,
 			}),
 			signal: AbortSignal.timeout(DISCORD_REQUEST_TIMEOUT_MS),
@@ -298,7 +302,7 @@ async function runDailyCheck(
 	 */
 	if (unsignedGames.length > 0) {
 		const message = [
-			"@itopozo",
+			`<@${DISCORD_USER_ID}>`,
 			"🔔 今日のゲーム日課に未受取があります！",
 			"",
 			`実行時刻：${startedAtJst}`,
@@ -364,7 +368,7 @@ async function runDailyCheck(
 		]);
 
 		const message = [
-			"@itopozo",
+			`<@${DISCORD_USER_ID}>`,
 			"⚠️ ゲーム日課の確認中にエラーが発生しました。",
 			"",
 			`実行時刻：${startedAtJst}`,
