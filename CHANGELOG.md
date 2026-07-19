@@ -13,8 +13,9 @@
 
 ### Changed
 
-- `keep_vars` を有効化し、Wranglerデプロイ時にCloudflareダッシュボードで管理する `DISCORD_USER_ID` を保持
-- `DISCORD_USER_ID` の本番での管理方法をREADMEへ追記
+- `DISCORD_USER_ID` の管理元をCloudflareダッシュボードから `wrangler.jsonc` の `vars` へ変更
+- `keep_vars` を削除し、通常変数の設定元をWranglerへ統一
+- `DISCORD_USER_ID` の管理方法に合わせてREADMEを更新
 
 ### Planned
 

@@ -7,7 +7,6 @@
 	"name": "game-routine-worker",
 	"main": "src/index.ts",
 	"compatibility_date": "2026-07-14",
-	"keep_vars": true,
 	"observability": {
 		"enabled": true
 	},
@@ -44,7 +43,9 @@
 	 * Note: Use secrets to store sensitive data.
 	 * https://developers.cloudflare.com/workers/configuration/secrets/
 	 */
-	// "vars": {  "MY_VARIABLE": "production_value" }
+	"vars": {
+		"DISCORD_USER_ID": "322055600194453527"
+	},
 	/**
 	 * Static Assets
 	 * https://developers.cloudflare.com/workers/static-assets/binding/
