@@ -62,6 +62,7 @@ HOYOLAB_COOKIE_TOKEN_V2=
 ```
 
 `DISCORD_USER_ID` は通常の環境変数として扱い、Webhook URLとHoYoLAB CookieはSecretとして管理します。
+本番の `DISCORD_USER_ID` はCloudflareダッシュボードで設定・管理します。`wrangler.jsonc` の `keep_vars: true` により、Wranglerでデプロイしてもダッシュボード側の値は保持されます。
 
 ### 3. 型定義を生成
 
@@ -83,6 +84,7 @@ npm run dev
 
 `main` ブランチへのpushをCloudflareのGit連携が検知し、自動でビルド・デプロイします。
 本番用シークレットはCloudflareダッシュボードで管理し、値をGitHubへ保存しないでください。
+通常変数 `DISCORD_USER_ID` もCloudflareダッシュボードで管理し、値をGitHubへ保存しないでください。
 
 手動でデプロイする場合は以下を実行します。
 

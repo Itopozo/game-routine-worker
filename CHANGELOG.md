@@ -11,6 +11,11 @@
 - Discord Webhookに10秒のタイムアウト処理
 - タイムアウトと接続失敗を区別する安全なエラーメッセージ
 
+### Changed
+
+- `keep_vars` を有効化し、Wranglerデプロイ時にCloudflareダッシュボードで管理する `DISCORD_USER_ID` を保持
+- `DISCORD_USER_ID` の本番での管理方法をREADMEへ追記
+
 ### Planned
 
 - エンドフィールドの受取状況判定

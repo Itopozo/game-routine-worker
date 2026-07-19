@@ -7,6 +7,7 @@
 	"name": "game-routine-worker",
 	"main": "src/index.ts",
 	"compatibility_date": "2026-07-14",
+	"keep_vars": true,
 	"observability": {
 		"enabled": true
 	},

@@ -34,3 +34,4 @@
 - [x] 詳細ログ
 - [x] HoYoLab APIとDiscord送信のタイムアウト処理
 - [x] GitHubへWorkers版コードを移行
+- [x] Wranglerデプロイ時にダッシュボード管理の通常変数を保持
