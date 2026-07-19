@@ -49,16 +49,19 @@ Cloudflare WorkersでHoYoLABの日課受取状況を確認し、未受取や確�
 npm install
 ```
 
-### 2. ローカル用の秘密情報を設定
+### 2. ローカル用の環境変数と秘密情報を設定
 
 プロジェクト直下に `.dev.vars` を作成します。このファイルはGit管理対象外です。
 
 ```dotenv
+DISCORD_USER_ID=
 DISCORD_WEBHOOK_URL=
 HOYOLAB_LTUID_V2=
 HOYOLAB_LTOKEN_V2=
 HOYOLAB_COOKIE_TOKEN_V2=
 ```
+
+`DISCORD_USER_ID` は通常の環境変数として扱い、Webhook URLとHoYoLAB CookieはSecretとして管理します。
 
 ### 3. 型定義を生成
 
