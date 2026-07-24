@@ -11,10 +11,10 @@ Cloudflare WorkersでHoYoLABの日課受取状況を確認し、未受取や確�
 
 ## 主な機能
 
-- 毎日23:00 JSTに受取状況を確認
-- 23:10 JSTにバックアップ確認
+- 毎日20:00～23:30 JSTに30分間隔で受取状況を確認
+- HoYoLabに未受取がある間は、エンドフィールドの案内を含めて毎回通知
 - 3ゲームのHoYoLAB APIを並列取得
-- Workers KVによる通知の重複防止
+- Workers KVによるエラー通知の重複防止
 - 未受取通知とAPIエラー通知をDiscordへ送信
 - Discordのリンクプレビューを抑制
 - Cloudflare Workers Logs向けの詳細ログ出力
@@ -96,15 +96,15 @@ WranglerのCronはUTCで指定しています。
 
 | Cron | 日本時間 | 用途 |
 |---|---:|---|
-| `0 14 * * *` | 23:00 | 通常確認 |
-| `10 14 * * *` | 23:10 | バックアップ確認 |
+| `0,30 11-14 * * *` | 20:00～23:30（30分間隔） | 未受取確認・反復通知 |
 
 ## 通知状態
 
 Workers KVのバインディング名は `NOTIFICATION_STATE` です。
 
-- `notification-sent:YYYY-MM-DD`: 通常通知済み
 - `error-notification-sent:YYYY-MM-DD`: エラー通知済み
+
+通常の未受取通知はKVで抑止せず、未受取がある間は各Cron実行時に送信します。
 
 キーは48時間で自動削除されます。
 
