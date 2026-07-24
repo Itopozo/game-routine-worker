@@ -12,8 +12,7 @@
 	},
 	"triggers": {
 		"crons": [
-			"0 14 * * *",
-			"10 14 * * *"
+			"0,30 11-14 * * *"
 		]
 	},
 	"upload_source_maps": true,
