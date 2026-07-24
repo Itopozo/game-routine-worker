@@ -13,6 +13,9 @@
 
 ### Changed
 
+- 通知時刻を20:00～23:30 JSTの30分間隔へ変更
+- HoYoLabに未受取がある間、エンドフィールドの案内を含む通知を毎回送信するよう変更
+- 通常通知のKVによる当日1回制限を廃止し、エラー通知のみ重複防止を継続
 - `DISCORD_USER_ID` の管理元をCloudflareダッシュボードから `wrangler.jsonc` の `vars` へ変更
 - `keep_vars` を削除し、通常変数の設定元をWranglerへ統一
 - `DISCORD_USER_ID` の管理方法に合わせてREADMEを更新
