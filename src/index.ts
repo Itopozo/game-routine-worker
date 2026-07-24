@@ -157,13 +157,8 @@ async function runDailyCheck(env: WorkerEnv, cronExpression: string): Promise<vo
 	console.log(`日本時間: ${startedAtJst}`);
 
 	const dateKey = getJstDateKey(startedAt);
-	const notificationKey = `notification-sent:${dateKey}`;
 	const errorNotificationKey = `error-notification-sent:${dateKey}`;
 
-	if ((await env.NOTIFICATION_STATE.get(notificationKey)) !== null) {
-		console.log(`本日は通常通知済みのため終了します: ${notificationKey}`);
-		return;
-	}
 
 	const results: GameCheckResult[] = await Promise.all(
 		GAMES.map(async (game): Promise<GameCheckResult> => {
@@ -207,8 +202,6 @@ async function runDailyCheck(env: WorkerEnv, cronExpression: string): Promise<vo
 			"リセットまであと少しです。お忘れなく！",
 		].join("\n");
 		await sendDiscordMessage(env, message);
-		await env.NOTIFICATION_STATE.put(notificationKey, startedAt.toISOString(), { expirationTtl: 172800 });
-		console.log(`通常通知済み状態を保存しました: ${notificationKey}`);
 		return;
 	}
 
